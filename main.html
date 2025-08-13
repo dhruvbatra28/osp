@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Scheduling Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>CPU Scheduling Simulator</h1>
+
+<div class="center">
+    <table id="inputTable">
+        <tr>
+            <th>Process Name</th>
+            <th>Arrival Time</th>
+            <th>Burst Time</th>
+            <th>Action</th>
+        </tr>
+    </table>
+    <button class="btn add" onclick="addRow()">Add Process</button>
+</div>
+  
+
+
+
+
+
+
+
+
+
+
+
+<div class="center controls">
+    <label for="algorithm">Choose Algorithm:</label>
+    <select id="algorithm" onchange="toggleQuantum()">
+        <option value="fcfs">First Come First Serve (FCFS)</option>
+        <option value="sjf">Shortest Job First (SJF)</option>
+        <option value="srjf">Shortest Remaining Job First (SRJF)</option>
+        <option value="rr">Round Robin (RR)</option>
+    </select>
+
+    <input type="number" id="quantum" placeholder="Time Quantum" style="display:none; width: 120px;">
+
+    <button class="btn run" onclick="runScheduling()">Run</button>
+</div>
+
+
+<h2 class="center">Output</h2>
+<div class="center">
+    <table id="outputTable">
+        <tr>
+            <th>Process</th>
+            <th>Arrival Time</th>
+            <th>Burst Time</th>
+            <th>Completion Time</th>
+            <th>Turnaround Time</th>
+            <th>Waiting Time</th>
+        </tr>
+    </table>
+    <p id="throughput"></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
