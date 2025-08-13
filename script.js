@@ -1,6 +1,6 @@
 let processCounter = 1;
 
-function addRow() {
+function addRow() {  // table , data add karne ke liye
     let table = document.getElementById("inputTable");
     let row = table.insertRow(-1);
     row.insertCell(0).innerHTML = `<input type="text" value="P${processCounter++}">`;
@@ -39,7 +39,7 @@ function toggleQuantum() {
 
 
 function runScheduling() {
-    let processes = getInputData();
+    let processes = getInputData();    // data stored in processes named array 
     if (processes.length === 0) {
         alert("Please enter at least one process with valid Arrival and Burst times!");
         return;
