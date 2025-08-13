@@ -107,7 +107,81 @@ function runScheduling() {
         }
     }
 
-    displayOutput(result, processes.length);
+
+
+
+
+
+
+
+
+
+
+   else if (algo === "rr") {
+    let quantum = parseInt(document.getElementById("quantum").value);
+    if (isNaN(quantum) || quantum <= 0) {
+        alert("Please enter a valid Time Quantum!");
+        return;
+    }
+
+    let time = 0;
+    let queue = [];
+    let completed = 0;
+
+    // Add runtime & finished flag
+    let remaining = processes.map(p => ({ ...p, rt: p.bt, finished: false }));
+
+    // Sort by arrival time
+    remaining.sort((a, b) => a.at - b.at);
+
+    while (completed < processes.length) {
+        // Add processes that have arrived to queue
+        remaining.forEach(p => {
+            if (p.at <= time && !queue.includes(p) && p.rt > 0) {
+                queue.push(p);
+            }
+        });
+
+        // If queue empty, jump to next arrival time
+        if (queue.length === 0) {
+            time++;
+            continue;
+        }
+
+        // Take first process in queue
+        let p = queue.shift();
+        let execTime = Math.min(quantum, p.rt);
+        p.rt -= execTime;
+        time += execTime;
+
+        // Add new arrivals during execution
+        remaining.forEach(proc => {
+            if (proc.at <= time && !queue.includes(proc) && proc.rt > 0) {
+                queue.push(proc);
+            }
+        });
+
+        // If process still has time left, push back to queue
+        if (p.rt > 0) {
+            queue.push(p);
+        }
+        // If process finished and not already recorded
+        else if (!p.finished) {
+            p.finished = true;
+            completed++;
+            let tat = time - p.at;
+            let wt = tat - p.bt;
+            result.push({ name: p.name, at: p.at, bt: p.bt, ct: time, tat, wt });
+        }
+    }
+
+
+
+   
+}
+ displayOutput(result, processes.length);
+
+  
 }
 
 function displayOutput(result, totalProcesses) {
@@ -135,3 +209,12 @@ function displayOutput(result, totalProcesses) {
     document.getElementById("throughput").innerText =
         "Throughput: " + (totalProcesses / totalTime).toFixed(2) ;
 }
+
+
+
+
+
+
+
+
+    
