@@ -1,4 +1,4 @@
-let processCounter = 1;
+let processCounter = 0;
 
 function addRow() {  // table , data add karne ke liye
     let table = document.getElementById("inputTable");
