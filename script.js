@@ -9,6 +9,14 @@ function addRow() {  // table , data add karne ke liye
     row.insertCell(3).innerHTML = `<button class="delete" onclick="removeRow(this)">Delete</button>`;
 }
 
+window.onload = function() {
+    for (let i = 0; i < 5; i++) {
+        addRow();
+    }
+};
+
+
+
 function removeRow(btn) {
     let row = btn.parentNode.parentNode;
     row.parentNode.removeChild(row);
