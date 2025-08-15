@@ -185,7 +185,6 @@ function runScheduling() {
 
 
 
-   
 }
  displayOutput(result, processes.length);
 
@@ -215,7 +214,7 @@ function displayOutput(result, totalProcesses) {
 
     let totalTime = Math.max(...result.map(r => r.ct));
     document.getElementById("throughput").innerText =
-        "Throughput: " + (totalProcesses / totalTime).toFixed(2) ;
+        "Throughput =  " + `${totalProcesses} / ${totalTime}` +" = " +  (totalProcesses / totalTime).toFixed(2) ;
 }
 
 
