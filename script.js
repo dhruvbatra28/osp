@@ -47,6 +47,7 @@ function toggleQuantum() {
 
 
 function runScheduling() {
+   
     let processes = getInputData();    // data stored in processes named array 
     if (processes.length === 0) {
         alert("Please enter at least one process with valid Arrival and Burst times!");
@@ -193,7 +194,9 @@ function runScheduling() {
   
 }
 
+
 function displayOutput(result, totalProcesses) {
+    let avgtat =0 ,avgwt=0; 
     let outTable = document.getElementById("outputTable");
     outTable.innerHTML = `
         <tr>
@@ -211,12 +214,15 @@ function displayOutput(result, totalProcesses) {
         row.insertCell(2).innerText = r.bt;
         row.insertCell(3).innerText = r.ct;
         row.insertCell(4).innerText = r.tat;
+        avgtat+=r.tat ;
+        avgwt+=r.wt
         row.insertCell(5).innerText = r.wt;
     });
 
     let totalTime = Math.max(...result.map(r => r.ct));
     document.getElementById("throughput").innerText =
-        "Throughput =  " + `${totalProcesses} / ${totalTime}` +" = " +  (totalProcesses / totalTime).toFixed(2) ;
+        "Throughput =  " + `${totalProcesses} / ${totalTime}` +" = " +  (totalProcesses / totalTime).toFixed(2)   ;
+        document.getElementById("avgvalues").innerText = "Average Turnaround Time = " + (avgtat / totalProcesses) + ", Average Waiting Time = " + (avgwt / totalProcesses).toFixed(2);
 }
 
 

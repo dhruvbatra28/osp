@@ -93,6 +93,11 @@ button.delete {
   margin-top: 15px;
   color: #2c3e50;
 }
+#avgvalues {
+  font-weight: bold;
+  margin-top: 15px;
+  color: #2c3e50;
+}
 
 
 #quantum {
