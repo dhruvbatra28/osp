@@ -136,59 +136,66 @@ function runScheduling() {
     let time = 0;
     let queue = [];
     let completed = 0;
-
+    let remaining = processes.map(p => ({ ...p, rt: p.bt, inQueue: false }));
     
-    let remaining = processes.map(p => ({ ...p, rt: p.bt, finished: false }));
-
-    // sorting on arrival time 
+    // Sort by arrival time
     remaining.sort((a, b) => a.at - b.at);
 
     while (completed < processes.length) {
-
-
-       // the queue for the remaining processes
+        // Add all processes that have arrived by current time to queue
         remaining.forEach(p => {
-            if (p.at <= time && !queue.includes(p) && p.rt > 0) {
+            if (p.at <= time && !p.inQueue && p.rt > 0) {
                 queue.push(p);
+                p.inQueue = true;
             }
         });
 
-       
         if (queue.length === 0) {
-            time++;
+            // No process in queue, advance time to next arrival
+            let nextArrival = remaining.filter(p => p.rt > 0).map(p => p.at);
+            if (nextArrival.length > 0) {
+                time = Math.min(...nextArrival);
+            }
             continue;
         }
 
-        
-        let p = queue.shift();
-        let execTime = Math.min(quantum, p.rt);
-        p.rt -= execTime;
+        // Get next process from queue
+        let currentProcess = queue.shift();
+        currentProcess.inQueue = false;
+
+        // Execute for quantum time or remaining time, whichever is smaller
+        let execTime = Math.min(quantum, currentProcess.rt);
+        currentProcess.rt -= execTime;
         time += execTime;
 
-        
-        remaining.forEach(proc => {
-            if (proc.at <= time && !queue.includes(proc) && proc.rt > 0) {
-                queue.push(proc);
+        // Check for newly arrived processes during execution
+        remaining.forEach(p => {
+            if (p.at <= time && !p.inQueue && p.rt > 0 && p !== currentProcess) {
+                queue.push(p);
+                p.inQueue = true;
             }
         });
 
-        // If process still has time left, push back to queue
-        if (p.rt > 0) {
-            queue.push(p);
-        }
-        // If process finished, calculate times and push to result
-        else if (!p.finished) {
-            p.finished = true;
+        // If process is not finished, put it back in queue
+        if (currentProcess.rt > 0) {
+            queue.push(currentProcess);
+            currentProcess.inQueue = true;
+        } else {
+            // Process completed
             completed++;
-            let tat = time - p.at;
-            let wt = tat - p.bt;
-            result.push({ name: p.name, at: p.at, bt: p.bt, ct: time, tat, wt });
+            let tat = time - currentProcess.at;
+            let wt = tat - currentProcess.bt;
+            result.push({ 
+                name: currentProcess.name, 
+                at: currentProcess.at, 
+                bt: currentProcess.bt, 
+                ct: time, 
+                tat, 
+                wt 
+            });
         }
     }
-
-
-
-}
+   }
  displayOutput(result, processes.length);
 
   
