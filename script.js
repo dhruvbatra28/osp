@@ -136,33 +136,35 @@ function runScheduling() {
     let queue = [];
     let completed = 0;
 
-    // Add runtime & finished flag
+    
     let remaining = processes.map(p => ({ ...p, rt: p.bt, finished: false }));
 
-    // Sort by arrival time
+    // sorting on arrival time 
     remaining.sort((a, b) => a.at - b.at);
 
     while (completed < processes.length) {
-        // Add processes that have arrived to queue
+
+
+       // the queue for the remaining processes
         remaining.forEach(p => {
             if (p.at <= time && !queue.includes(p) && p.rt > 0) {
                 queue.push(p);
             }
         });
 
-        // If queue empty, jump to next arrival time
+       
         if (queue.length === 0) {
             time++;
             continue;
         }
 
-        // Take first process in queue
+        
         let p = queue.shift();
         let execTime = Math.min(quantum, p.rt);
         p.rt -= execTime;
         time += execTime;
 
-        // Add new arrivals during execution
+        
         remaining.forEach(proc => {
             if (proc.at <= time && !queue.includes(proc) && proc.rt > 0) {
                 queue.push(proc);
@@ -173,7 +175,7 @@ function runScheduling() {
         if (p.rt > 0) {
             queue.push(p);
         }
-        // If process finished and not already recorded
+        // If process finished, calculate times and push to result
         else if (!p.finished) {
             p.finished = true;
             completed++;
